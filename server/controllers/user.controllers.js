@@ -2,6 +2,7 @@ import bcryptjs from "bcryptjs";
 import UserModel from "./../models/user.model.js";
 import sendEmail from "./../config/sendEmail.js";
 import verifyEmailTemplate from "./../utils/verifyEmailTemplate.js";
+import generatedAccessToken from "./../utils/generatedAccessToken.js";
 
 //register new user
 
@@ -71,6 +72,7 @@ export async function registerUserController(request, response) {
   }
 }
 
+//verify Email
 export async function verifyEmailController(request, response) {
   try {
     //find verification code when user register first time then user need to verify email
@@ -104,6 +106,95 @@ export async function verifyEmailController(request, response) {
       message: error.message || error,
       error: true,
       success: true,
+    });
+  }
+}
+
+//login
+export async function loginController(request, response) {
+  try {
+    const { email, password } = request.body;
+
+    //if user can't provide their email and password then throw an error
+
+    if (!email || !password) {
+      return response.status(400).json({
+        message: "provide email, password",
+        error: true,
+        success: false,
+      });
+    }
+
+    //after that check given email is register or not
+
+    const user = await UserModel.findOne({ email });
+
+    //if not register than throw an error
+
+    if (!user) {
+      return response.status(400).json({
+        message: "User not register",
+        error: true,
+        success: false,
+      });
+    }
+
+    //after that check user status
+
+    if (user.status !== "Active") {
+      return response.status(400).json({
+        message: "Contact to Admin",
+        error: true,
+        success: false,
+      });
+    }
+
+    //check password
+    const checkPassword = await bcryptjs.compare(password, user.password);
+
+    //if password is not match then throw an error
+
+    if (!checkPassword) {
+      return response.status(400).json({
+        message: "Check your password",
+        error: true,
+        success: false,
+      });
+    }
+
+    //if user password is correct then send the token to  the client side(access and refresh)
+
+    const accessToken = await generatedAccessToken(user._id);
+    const refreshToken = await generatedAccessToken(user._id);
+
+    //after that update user last login
+    const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+      last_login_date: new Date(),
+    });
+
+    const cookiesOption = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    };
+
+    response.cookie("accessToken", accessToken, cookiesOption);
+    response.cookie("refreshToken", refreshToken, cookiesOption);
+
+    return response.json({
+      message: "Login successfully",
+      error: false,
+      success: true,
+      data: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
     });
   }
 }
