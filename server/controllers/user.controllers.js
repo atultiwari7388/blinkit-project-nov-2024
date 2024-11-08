@@ -3,6 +3,7 @@ import UserModel from "./../models/user.model.js";
 import sendEmail from "./../config/sendEmail.js";
 import verifyEmailTemplate from "./../utils/verifyEmailTemplate.js";
 import generatedAccessToken from "./../utils/generatedAccessToken.js";
+import uploadImageCloudinary from "./../utils/uploadImageCloudinary.js";
 
 //register new user
 
