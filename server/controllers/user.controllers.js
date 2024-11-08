@@ -519,3 +519,15 @@ export async function refreshToken(request, response) {
     });
   }
 }
+
+//get user details
+export async function userDetails(request, response) {
+  try {
+  } catch (error) {
+    return response.status(500).json({
+      message: "Something is wrong",
+      error: true,
+      success: false,
+    });
+  }
+}
