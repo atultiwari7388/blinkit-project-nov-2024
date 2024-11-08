@@ -48,11 +48,9 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 8080;
 
-connectDB();
-
-// Run server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+connectDB().then(() => {
+  // Run server
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
-
-// A39Zw6ClbIPeEDvh
