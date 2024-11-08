@@ -11,7 +11,7 @@ const resend = new Resend(process.env.RESEND_API);
 const sendEmail = async ({ sendTo, subject, html }) => {
   try {
     const { data, error } = await resend.emails.send({
-      from: "BlinkProject <noreply@atul.mylexinfotech@gmail.com>", // Replace with an email address authorized by Resend
+      from: "BlinkProject <noreply@mylexinfotech.com>", // Replace with an email address authorized by Resend
       to: sendTo,
       subject: subject,
       html: html,
