@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import helmet from "helmet";
 import connectDB from "./config/connectDb.js";
+import userRouter from "./routes/user.routes.js";
 
 dotenv.config();
 
@@ -40,11 +41,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
-});
+app.use("/api/user", userRouter);
 
 const PORT = process.env.PORT || 8080;
 

@@ -1,7 +1,7 @@
-import UserModel from "./../models/user.model";
 import bcryptjs from "bcryptjs";
-import sendEmail from "./../config/sendEmail";
-import verifyEmailTemplate from "./../utils/verifyEmailTemplate";
+import UserModel from "./../models/user.model.js";
+import sendEmail from "./../config/sendEmail.js";
+import verifyEmailTemplate from "./../utils/verifyEmailTemplate.js";
 
 //register new user
 
