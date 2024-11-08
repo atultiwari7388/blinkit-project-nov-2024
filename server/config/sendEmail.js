@@ -1,9 +1,9 @@
-import { Resend } from "resend";
 import dotenv from "dotenv";
+import { Resend } from "resend";
 dotenv.config();
 
 if (!process.env.RESEND_API) {
-  console.log("Provide RESEND_API in side the .env file");
+  throw new Error("Please provide RESEND_API in the .env file");
 }
 
 const resend = new Resend(process.env.RESEND_API);
@@ -11,19 +11,21 @@ const resend = new Resend(process.env.RESEND_API);
 const sendEmail = async ({ sendTo, subject, html }) => {
   try {
     const { data, error } = await resend.emails.send({
-      from: "BlinkProject <noreply@tiwariatul9526@gmail.com>",
+      from: "BlinkProject <noreply@atul.mylexinfotech@gmail.com>", // Replace with an email address authorized by Resend
       to: sendTo,
       subject: subject,
       html: html,
     });
 
     if (error) {
-      return console.error({ error });
+      console.error("Email sending failed:", error);
+      return null; // Handle the error as needed
     }
 
     return data;
   } catch (error) {
-    console.log(error);
+    console.error("Unexpected error in sendEmail:", error);
+    return null; // Handle further if needed
   }
 };
 

@@ -36,7 +36,7 @@ export async function registerUserController(request, response) {
     const payload = {
       name,
       email,
-      password: hashPassword,
+      password: hashedPassword,
     };
     //save user data to database
     const newUser = new UserModel(payload);
@@ -53,7 +53,7 @@ export async function registerUserController(request, response) {
         url: VerifyEmailUrl,
       }),
     });
-
+    console.log(verifyEmail);
     //after that return json data
 
     return response.json({
@@ -67,6 +67,43 @@ export async function registerUserController(request, response) {
       message: error.message || error,
       error: true,
       success: false,
+    });
+  }
+}
+
+export async function verifyEmailController(request, response) {
+  try {
+    //find verification code when user register first time then user need to verify email
+    const { code } = request.body;
+    //after that find the user id
+    const user = await UserModel.findOne({ _id: code });
+    //if user is not available or user id is wrong
+    if (!user) {
+      return response.status(400).json({
+        message: "Invalid code",
+        error: true,
+        success: false,
+      });
+    }
+
+    //if user is valid
+    const updateUser = await UserModel.updateOne(
+      { _id: code },
+      {
+        verify_email: true,
+      }
+    );
+
+    return response.json({
+      message: "Verify email done",
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: true,
     });
   }
 }
