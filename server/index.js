@@ -9,6 +9,13 @@ dotenv.config();
 
 const app = express();
 
+// Check for required environment variables
+if (!process.env.FRONTEND_URL) {
+  console.error("FRONTEND_URL is not defined in environment variables");
+  process.exit(1);
+}
+
+// Middleware
 app.use(
   cors({
     credentials: true,
@@ -23,3 +30,24 @@ app.use(
     crossOriginResourcePolicy: false,
   })
 );
+
+// Placeholder route
+app.get("/", (req, res) => {
+  //server to  client
+  res.json({
+    message: "Api is running....",
+  });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!" });
+});
+
+const PORT = process.env.PORT || 8080;
+
+// Run server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
