@@ -38,10 +38,13 @@ export default function ForgotPassword() {
       }
       if (response.data.success) {
         toast.success(response.data.message);
+
+        navigate("/verification-otp", {
+          state: data,
+        });
         setData({
           email: "",
         });
-        navigate("/verification-otp");
       }
     } catch (error) {
       console.log(error?.response?.data?.message);
@@ -84,14 +87,14 @@ export default function ForgotPassword() {
               valideValue ? "bg-primary-200" : "bg-gray-400 cursor-not-allowed"
             } transition-all flex justify-center items-center`}
           >
-            {isLoading ? <HashLoader color="#fff" size={24} /> : "Submit"}
+            {isLoading ? <HashLoader color="#fff" size={24} /> : "Send Otp"}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-5">
-          Don&apos;t have an account?{" "}
-          <Link to="/register" className="text-primary-200 font-semibold">
-            Create Account
+          Already have an account?{" "}
+          <Link to="/login" className="text-primary-200 font-semibold">
+            Login
           </Link>
         </p>
       </div>
