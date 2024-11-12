@@ -10,47 +10,49 @@ import forgotPasswordTemplate from "./../utils/forgotPasswordTemplate.js";
 import jwt from "jsonwebtoken";
 
 //register new user
+
 export async function registerUserController(request, response) {
   try {
     const { name, email, password } = request.body;
 
-    //if anyone of these fields not available then throw an error
+    // Validate required fields
     if (!name || !email || !password) {
       return response.status(400).json({
-        message: "provide email, name, password",
+        message: "Please provide name, email, and password",
         error: true,
         success: false,
       });
     }
 
-    //check if same email is already register or not
+    // Check if email is already registered
     const user = await UserModel.findOne({ email });
-    //same email exists then throw an error
     if (user) {
-      return response.json({
-        message: "Already register email",
+      return response.status(409).json({
+        message: "Email is already registered",
         error: true,
         success: false,
       });
     }
-    //if email is new then store user data to database but firstly hash/bcrypt the password
+
+    // Hash the password
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
 
-    //create payload
-    const payload = {
+    // Create new user payload
+    const newUser = new UserModel({
       name,
       email,
       password: hashedPassword,
-    };
-    //save user data to database
-    const newUser = new UserModel(payload);
-    const save = await newUser.save();
+    });
 
-    const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`;
+    // Save user data to the database
+    const savedUser = await newUser.save();
 
-    //after that send verification email to user
-    const verifyEmail = await sendEmail({
+    // Generate verification URL
+    const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${savedUser._id}`;
+
+    // Send verification email
+    await sendEmail({
       sendTo: email,
       subject: "Verify your Email from Blink Project",
       html: verifyEmailTemplate({
@@ -58,23 +60,91 @@ export async function registerUserController(request, response) {
         url: VerifyEmailUrl,
       }),
     });
-    console.log(verifyEmail);
-    //after that return json data
 
-    return response.json({
-      message: "User register successfully",
+    console.log("My Email", email);
+
+    // Return success response
+    return response.status(201).json({
+      message:
+        "User registered successfully. Please check your email to verify your account.",
       error: false,
       success: true,
-      data: save,
+      data: savedUser,
     });
   } catch (error) {
     return response.status(500).json({
-      message: error.message || error,
+      message: error.message || "An error occurred during registration",
       error: true,
       success: false,
     });
   }
 }
+
+// export async function registerUserController(request, response) {
+//   try {
+//     const { name, email, password } = request.body;
+
+//     //if anyone of these fields not available then throw an error
+//     if (!name || !email || !password) {
+//       return response.status(400).json({
+//         message: "provide email, name, password",
+//         error: true,
+//         success: false,
+//       });
+//     }
+
+//     //check if same email is already register or not
+//     const user = await UserModel.findOne({ email });
+//     //same email exists then throw an error
+//     if (user) {
+//       return response.json({
+//         message: "Already register email",
+//         error: true,
+//         success: false,
+//       });
+//     }
+//     //if email is new then store user data to database but firstly hash/bcrypt the password
+//     const salt = await bcryptjs.genSalt(10);
+//     const hashedPassword = await bcryptjs.hash(password, salt);
+
+//     //create payload
+//     const payload = {
+//       name,
+//       email,
+//       password: hashedPassword,
+//     };
+//     //save user data to database
+//     const newUser = new UserModel(payload);
+//     const save = await newUser.save();
+
+//     const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`;
+
+//     //after that send verification email to user
+//     const verifyEmail = await sendEmail({
+//       sendTo: email,
+//       subject: "Verify your Email from Blink Project",
+//       html: verifyEmailTemplate({
+//         name,
+//         url: VerifyEmailUrl,
+//       }),
+//     });
+//     console.log(verifyEmail);
+//     //after that return json data
+
+//     return response.json({
+//       message: "User register successfully",
+//       error: false,
+//       success: true,
+//       data: save,
+//     });
+//   } catch (error) {
+//     return response.status(500).json({
+//       message: error.message || error,
+//       error: true,
+//       success: false,
+//     });
+//   }
+// }
 
 //verify Email
 export async function verifyEmailController(request, response) {
