@@ -1,18 +1,15 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaRegEyeSlash, FaRegEye } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { Axios } from "../../utils/axios";
 import SummaryApi from "../../common/Api";
 import AxiosToastError from "../../utils/AxiosToastError";
 import { HashLoader } from "react-spinners";
 
-export default function LoginPage() {
+export default function ForgotPassword() {
   const [data, setData] = useState({
     email: "",
-    password: "",
   });
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -32,7 +29,7 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       const response = await Axios({
-        ...SummaryApi.login,
+        ...SummaryApi.forgot_password,
         data: data,
       });
 
@@ -43,9 +40,8 @@ export default function LoginPage() {
         toast.success(response.data.message);
         setData({
           email: "",
-          password: "",
         });
-        navigate("/");
+        navigate("/verification-otp");
       }
     } catch (error) {
       console.log(error?.response?.data?.message);
@@ -56,10 +52,10 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="flex justify-center items-center mt-10 bg-gray-100 px-1">
+    <section className="flex justify-center items-center mt-9 bg-gray-100 px-1">
       <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-8">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Login to access your account
+          Forgot Password
         </h1>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
@@ -81,40 +77,6 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="relative">
-            <label
-              htmlFor="password"
-              className="text-sm font-semibold text-gray-600"
-            >
-              Password
-            </label>
-            <div className="mt-1 w-full p-3 border border-gray-300 rounded flex items-center focus-within:ring-indigo-500 focus-within:border-indigo-500">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={data.password}
-                onChange={handleChange}
-                placeholder="••••••••"
-                className="w-full outline-none"
-              />
-              <div
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="cursor-pointer ml-2 text-gray-500"
-              >
-                {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
-              </div>
-            </div>
-            <div className="flex justify-end">
-              <Link
-                to="/forgot-password"
-                className="hover:text-primary-100 text-sm"
-              >
-                Forgot password?
-              </Link>
-            </div>
-          </div>
-
           <button
             type="submit"
             disabled={!valideValue || isLoading}
@@ -122,7 +84,7 @@ export default function LoginPage() {
               valideValue ? "bg-primary-200" : "bg-gray-400 cursor-not-allowed"
             } transition-all flex justify-center items-center`}
           >
-            {isLoading ? <HashLoader color="#fff" size={24} /> : "Login"}
+            {isLoading ? <HashLoader color="#fff" size={24} /> : "Submit"}
           </button>
         </form>
 

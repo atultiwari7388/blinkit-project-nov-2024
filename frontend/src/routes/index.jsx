@@ -4,6 +4,8 @@ import Home from "../pages/home/home";
 import SearchPage from "../pages/search/Search";
 import LoginPage from "../pages/login/LoginPage";
 import RegisterPage from "../pages/register/RegisterPage";
+import ForgotPassword from "../pages/forgotPassword/ForgotPassword";
+import OtpVerification from "../pages/otpVerification/OtpVerification";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <RegisterPage />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "verification-otp",
+        element: <OtpVerification />,
       },
     ],
   },
