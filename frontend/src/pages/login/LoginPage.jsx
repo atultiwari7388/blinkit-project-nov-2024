@@ -41,10 +41,13 @@ export default function LoginPage() {
       }
       if (response.data.success) {
         toast.success(response.data.message);
-        setData({
-          email: "",
-          password: "",
-        });
+        //set login details to local storage
+        localStorage.setItem("accessToken", response.data.data.accessToken),
+          localStorage.setItem("refreshToken", response.data.data.refreshToken),
+          setData({
+            email: "",
+            password: "",
+          });
         navigate("/");
       }
     } catch (error) {
