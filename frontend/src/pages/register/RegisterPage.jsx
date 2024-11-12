@@ -4,6 +4,8 @@ import { FaRegEyeSlash, FaRegEye } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { Axios } from "../../utils/axios";
 import SummaryApi from "../../common/Api";
+import AxiosToastError from "../../utils/AxiosToastError";
+import { HashLoader } from "react-spinners";
 
 export default function RegisterPage() {
   const [data, setData] = useState({
@@ -14,6 +16,7 @@ export default function RegisterPage() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -29,15 +32,35 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (data.password !== data.confirmPassword) {
-      toast.error("Password and Confirm Password mst be same");
+      toast.error("Password and Confirm Password must be the same");
       return;
     }
+    setIsLoading(true);
+    try {
+      const response = await Axios({
+        ...SummaryApi.register,
+        data: data,
+      });
 
-    const response = await Axios({
-      ...SummaryApi.register,
-    });
-
-    console.log("response", response);
+      if (response.data.error) {
+        toast.error(response.data.error);
+      }
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error?.response?.data?.message);
+      AxiosToastError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -138,12 +161,16 @@ export default function RegisterPage() {
 
           <button
             type="submit"
-            disabled={!valideValue}
+            disabled={!valideValue || isLoading}
             className={`w-full py-3 rounded-md text-white font-semibold tracking-wide ${
               valideValue ? "bg-primary-200" : "bg-gray-400 cursor-not-allowed"
-            } transition-all`}
+            } transition-all flex justify-center items-center`}
           >
-            Register
+            {isLoading ? (
+              <HashLoader color="#fff" size={24} /> // Show HashLoader if loading
+            ) : (
+              "Register" // Show button text if not loading
+            )}
           </button>
         </form>
 
