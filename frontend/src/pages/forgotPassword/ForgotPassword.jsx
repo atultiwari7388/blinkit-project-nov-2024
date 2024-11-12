@@ -1,10 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { Axios } from "../../utils/axios";
+
 import SummaryApi from "../../common/Api";
 import AxiosToastError from "../../utils/AxiosToastError";
 import { HashLoader } from "react-spinners";
+import Axios from "../../utils/axios";
 
 export default function ForgotPassword() {
   const [data, setData] = useState({

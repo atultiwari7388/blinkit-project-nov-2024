@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Axios } from "../../utils/axios";
+import Axios from "../../utils/axios";
 import SummaryApi from "../../common/Api";
 import AxiosToastError from "../../utils/AxiosToastError";
 import { HashLoader } from "react-spinners";

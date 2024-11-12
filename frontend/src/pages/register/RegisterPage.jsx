@@ -2,7 +2,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
-import { Axios } from "../../utils/axios";
+import Axios from "../../utils/axios";
 import SummaryApi from "../../common/Api";
 import AxiosToastError from "../../utils/AxiosToastError";
 import { HashLoader } from "react-spinners";
