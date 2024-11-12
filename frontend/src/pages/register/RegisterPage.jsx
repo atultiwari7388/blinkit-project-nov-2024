@@ -1,6 +1,9 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
+import { Axios } from "../../utils/axios";
+import SummaryApi from "../../common/Api";
 
 export default function RegisterPage() {
   const [data, setData] = useState({
@@ -23,13 +26,18 @@ export default function RegisterPage() {
 
   const valideValue = Object.values(data).every((el) => el);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (data.password !== data.confirmPassword) {
-      // Add error handling
+      toast.error("Password and Confirm Password mst be same");
       return;
     }
-    // Add registration API call
+
+    const response = await Axios({
+      ...SummaryApi.register,
+    });
+
+    console.log("response", response);
   };
 
   return (
