@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Axios } from "../../utils/axios";
 import SummaryApi from "../../common/Api";
 import AxiosToastError from "../../utils/AxiosToastError";
@@ -11,6 +11,13 @@ export default function OtpVerification() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const inputRef = useRef([]);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location?.state?.email) {
+      navigate("/forgot-password");
+    }
+  }, []);
 
   const valideValue = data.every((el) => el);
 
