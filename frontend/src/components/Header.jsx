@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import useMobile from "../hooks/useMobile";
 import { GrCart } from "react-icons/gr";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const [isMobile] = useMobile();
@@ -11,6 +12,9 @@ export default function Header() {
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
   const navigate = useNavigate();
+  const user = useSelector((state) => state?.user);
+
+  console.log("User from store", user);
 
   const redirectToLoginPage = () => {
     navigate("/login");
