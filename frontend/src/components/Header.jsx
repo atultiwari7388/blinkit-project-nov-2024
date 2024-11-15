@@ -60,17 +60,25 @@ export default function Header() {
             <div className="hidden lg:flex items-center gap-6">
               {user?._id ? (
                 <div className="relative">
-                  <div className="flex items-center gap-2">
+                  <div
+                    onClick={() => setOpenUserMenu((prev) => !prev)}
+                    className="flex items-center gap-1 cursor-pointer select-none "
+                  >
                     <p>Account</p>
-                    <FaAngleDown />
+                    {openUserMenu ? (
+                      <FaAngleUp size={12} />
+                    ) : (
+                      <FaAngleDown size={12} />
+                    )}
+                  </div>
 
-                    {/* <FaAngleUp /> */}
-                  </div>
-                  <div className="absolute right-0 top-12">
-                    <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
-                      <UserMenu />
+                  {openUserMenu && (
+                    <div className="absolute right-0 top-12">
+                      <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
+                        <UserMenu />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               ) : (
                 <button
