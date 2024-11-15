@@ -38,6 +38,12 @@ export default function UserMenu({ close }) {
       toast.error(error.response?.data?.message || "Error logging out");
     }
   };
+
+  const handleClose = () => {
+    if (close) {
+      close();
+    }
+  };
   return (
     <div>
       <div className="font-semibold">My Account </div>
@@ -45,19 +51,25 @@ export default function UserMenu({ close }) {
         <span className="max-w-52 text-ellipsis line-clamp-1">
           {user?.name || user?.mobile}{" "}
         </span>
-        <Link to={`/dashboard/profile`} className="hover:text-primary-200">
+        <Link
+          onClick={handleClose}
+          to={`/dashboard/profile`}
+          className="hover:text-primary-200"
+        >
           <HiExternalLink size={15} />
         </Link>
       </div>
       <Divider />
       <div className="text-sm grid gap-1 ">
         <Link
+          onClick={handleClose}
           to={"/dashboard/myorders"}
           className="px-2 hover:bg-gray-100 rounded-md p-2 "
         >
           My orders
         </Link>
         <Link
+          onClick={handleClose}
           to={"/dashboard/addressess"}
           className="px-2 hover:bg-gray-200 rounded-md"
         >
