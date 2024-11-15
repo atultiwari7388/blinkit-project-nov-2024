@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import fetchUserDetails from "./utils/fetchUserDetails";
-import { setUserDetails } from "./reduxStores/userDetailsSlice";
+import { setUserDetails } from "./reduxStores/userSlice";
 import { useDispatch } from "react-redux";
 
 export default function App() {
@@ -12,8 +12,12 @@ export default function App() {
 
   const fetchUser = async () => {
     const userData = await fetchUserDetails();
-    // console.log("UserDate", userData.data);
-    dispatch(setUserDetails(userData.data));
+    if (userData) {
+      dispatch(setUserDetails(userData.data));
+      console.log("UserData", userData.data);
+    } else {
+      console.log("User not authenticated or error occurred.");
+    }
   };
 
   useEffect(() => {

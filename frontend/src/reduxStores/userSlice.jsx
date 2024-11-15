@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Initial state representing an empty/logged out user
 const initialValue = {
   _id: "",
   name: "",
@@ -33,10 +34,13 @@ const userSlice = createSlice({
       state.orderHistory = action.payload?.orderHistory;
       state.role = action.payload?.role;
     },
+
+    // Updates just the avatar field
     updatedAvatar: (state, action) => {
       state.avatar = action.payload;
     },
-    logout: (state, action) => {
+
+    logout: (state) => {
       state._id = "";
       state.name = "";
       state.email = "";

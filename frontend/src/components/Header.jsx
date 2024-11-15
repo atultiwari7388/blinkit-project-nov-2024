@@ -5,6 +5,8 @@ import { CgProfile } from "react-icons/cg";
 import useMobile from "../hooks/useMobile";
 import { GrCart } from "react-icons/gr";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import UserMenu from "./UserMenu";
 
 export default function Header() {
   const [isMobile] = useMobile();
@@ -12,9 +14,14 @@ export default function Header() {
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
   const navigate = useNavigate();
+
   const user = useSelector((state) => state?.user);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
 
   console.log("User from store", user);
+  console.log("User from local storage", localStorage.getItem("accessToken"));
+  console.log("User from local storage", localStorage.getItem("refreshToken"));
+  console.log("User from local storage", user?.name);
 
   const redirectToLoginPage = () => {
     navigate("/login");
@@ -52,11 +59,17 @@ export default function Header() {
             {/** Login and Cart buttons for desktop */}
             <div className="hidden lg:flex items-center gap-6">
               {user?._id ? (
-                <div>
+                <div className="relative">
                   <div className="flex items-center gap-2">
                     <p>Account</p>
                     <FaAngleDown />
+
                     {/* <FaAngleUp /> */}
+                  </div>
+                  <div className="absolute right-0 top-12">
+                    <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
+                      <UserMenu />
+                    </div>
                   </div>
                 </div>
               ) : (
