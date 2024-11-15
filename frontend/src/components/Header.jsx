@@ -27,6 +27,19 @@ export default function Header() {
     navigate("/login");
   };
 
+  const handleCloseUser = () => {
+    setOpenUserMenu(false);
+  };
+
+  const handleMobileUser = () => {
+    if (!user._id) {
+      navigate("/login");
+      return;
+    }
+
+    navigate("/user");
+  };
+
   return (
     <header className="h-24 lg:h-20 shadow-md sticky top-0 flex flex-col justify-center gap-1 bg-gradient-to-r from-primary-500 to-primary-200">
       {!(isSearchPage && isMobile) && (
@@ -52,7 +65,7 @@ export default function Header() {
           {/** User and Cart Section */}
           <div className="flex items-center gap-5">
             {/** Profile icon for mobile */}
-            <button className="lg:hidden text-white">
+            <button className="lg:hidden text-white" onClick={handleMobileUser}>
               <CgProfile size={26} />
             </button>
 
@@ -75,7 +88,7 @@ export default function Header() {
                   {openUserMenu && (
                     <div className="absolute right-0 top-12">
                       <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
-                        <UserMenu />
+                        <UserMenu close={handleCloseUser} />
                       </div>
                     </div>
                   )}

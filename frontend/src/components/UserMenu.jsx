@@ -6,7 +6,7 @@ import Axios from "../utils/axios";
 import SummaryApi from "../common/Api";
 import { logout } from "../reduxStores/userSlice";
 
-export default function UserMenu() {
+export default function UserMenu({ close }) {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -20,11 +20,15 @@ export default function UserMenu() {
       });
 
       if (response.data.success) {
+        if (close) {
+          close();
+        }
         dispatch(logout());
-        toast.success(response.data.message);
+
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        window.location.href = "/login";
+        window.location.href = "/";
+        toast.success("Logout Successfully");
       } else {
         toast.error("Logout failed");
       }
