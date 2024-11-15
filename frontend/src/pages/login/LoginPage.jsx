@@ -6,6 +6,9 @@ import Axios from "../../utils/axios";
 import SummaryApi from "../../common/Api";
 import AxiosToastError from "../../utils/AxiosToastError";
 import { HashLoader } from "react-spinners";
+import fetchUserDetails from "../../utils/fetchUserDetails";
+import { useDispatch } from "react-redux";
+import { setUserDetails } from "../../reduxStores/userSlice";
 
 export default function LoginPage() {
   const [data, setData] = useState({
@@ -15,6 +18,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,15 +43,19 @@ export default function LoginPage() {
       if (response.data.error) {
         toast.error(response.data.error);
       }
+
       if (response.data.success) {
         toast.success(response.data.message);
-        //set login details to local storage
-        localStorage.setItem("accessToken", response.data.data.accessToken),
-          localStorage.setItem("refreshToken", response.data.data.refreshToken),
-          setData({
-            email: "",
-            password: "",
-          });
+        localStorage.setItem("accesstoken", response.data.data.accesstoken);
+        localStorage.setItem("refreshToken", response.data.data.refreshToken);
+
+        const userDetails = await fetchUserDetails();
+        dispatch(setUserDetails(userDetails.data));
+
+        setData({
+          email: "",
+          password: "",
+        });
         navigate("/");
       }
     } catch (error) {
