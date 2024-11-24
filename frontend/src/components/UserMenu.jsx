@@ -47,7 +47,7 @@ const UserMenu = ({ close }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-4 min-w-[250px]">
+    <div className="bg-white rounded-lg shadow-lg p-4 min-w-[200px] max-h-[calc(100vh-100px)] overflow-hidden">
       <div className="font-bold text-xl text-gray-800 mb-2">My Account</div>
       <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg mb-3">
         <div className="w-10 h-10 bg-primary-200 rounded-full flex items-center justify-center">

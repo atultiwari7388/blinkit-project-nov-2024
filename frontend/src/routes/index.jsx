@@ -15,7 +15,7 @@ import Addressess from "../pages/addresses/Addressess";
 import Category from "../pages/category/Category";
 import SubCategory from "../pages/subCategory/SubCategory";
 import UploadProduct from "../pages/uploadProduct/UploadProduct";
-import Product from "../pages/product/Product";
+import AdminProduct from "../pages/adminProduct/AdminProduct";
 
 const router = createBrowserRouter([
   {
@@ -84,7 +84,7 @@ const router = createBrowserRouter([
           },
           {
             path: "product",
-            element: <Product />,
+            element: <AdminProduct />,
           },
         ],
       },
