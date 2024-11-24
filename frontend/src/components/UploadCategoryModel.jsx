@@ -1,17 +1,23 @@
-import PropTypes from "prop-types";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import uploadImage from "../utils/UploadImage";
+import Axios from "../utils/Axios";
+import SummaryApi from "../common/Api";
+import toast from "react-hot-toast";
+import AxiosToastError from "../utils/AxiosToastError";
 
-export default function UploadCategoryModel({ close }) {
-  const [data, setData] = useState({
+const UploadCategoryModel = ({ close }) => {
+  const [categoryData, setCategoryData] = useState({
     name: "",
     image: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
 
-    setData((preve) => {
+    setCategoryData((preve) => {
       return {
         ...preve,
         [name]: value,
@@ -19,109 +25,133 @@ export default function UploadCategoryModel({ close }) {
     });
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setData((prev) => ({
-        ...prev,
-        image: imageUrl,
-      }));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      const response = await Axios({
+        ...SummaryApi.addCategory,
+        data: categoryData,
+      });
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        toast.success(responseData.message);
+        close();
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleUploadCategoryImage = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    // Show selected image preview
+    setSelectedImage(URL.createObjectURL(file));
+
+    try {
+      const response = await uploadImage(file);
+      const ImageResponse = response?.data;
+
+      if (!ImageResponse?.data?.url) {
+        throw new Error("Image upload failed or URL missing");
+      }
+
+      setCategoryData((prev) => ({
+        ...prev,
+        image: ImageResponse.data.url,
+      }));
+    } catch (error) {
+      console.error("Image upload error:", error.message);
+      toast.error("Failed to upload image. Please try again.");
+    }
   };
 
   return (
-    <section className="fixed inset-0 p-4 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white max-w-4xl w-full p-6 rounded-xl shadow-2xl transform transition-all">
-        <div className="flex items-center justify-between border-b pb-4">
-          <h1 className="text-2xl font-bold text-gray-800">Add New Category</h1>
-          <button
-            onClick={close}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <IoClose size={24} className="text-gray-600" />
+    <section className="fixed top-0 bottom-0 left-0 right-0 p-4 bg-neutral-800 bg-opacity-60 flex items-center justify-center">
+      <div className="bg-white max-w-4xl w-full p-4 rounded">
+        <div className="flex items-center justify-between">
+          <h1 className="font-semibold">Category</h1>
+          <button onClick={close} className="w-fit block ml-auto">
+            <IoClose size={25} />
           </button>
         </div>
-
-        <form className="my-6 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <label
-              id="categoryName"
-              className="text-sm font-medium text-gray-700"
-            >
-              Category Name
-            </label>
+        <form className="my-3 grid gap-2" onSubmit={handleSubmit}>
+          <div className="grid gap-1">
+            <label id="categoryName">Name</label>
             <input
               type="text"
               id="categoryName"
               placeholder="Enter category name"
-              value={data.name}
+              value={categoryData.name}
               name="name"
               onChange={handleOnChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-200 focus:border-transparent outline-none transition-all duration-200 bg-gray-50"
+              className="bg-blue-50 p-2 border border-blue-100 focus-within:border-primary-200 outline-none rounded"
             />
           </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-gray-700">Category Image</p>
-            <div className="flex gap-6 flex-col lg:flex-row items-center">
-              <div className="border-2 border-dashed border-gray-300 bg-gray-50 h-48 w-full lg:w-48 rounded-xl overflow-hidden flex items-center justify-center transition-all hover:border-primary-200">
-                {data.image ? (
+          <div className="grid gap-1">
+            <p>Image</p>
+            <div className="flex gap-4 flex-col lg:flex-row items-center">
+              <div className="border bg-blue-50 h-36 w-full lg:w-36 flex items-center justify-center rounded">
+                {categoryData.image ? (
                   <img
                     alt="category"
-                    src={data.image}
-                    className="w-full h-full object-cover"
+                    src={categoryData.image}
+                    className="w-full h-full object-scale-down"
+                  />
+                ) : selectedImage ? (
+                  <img
+                    alt="selected category"
+                    src={selectedImage}
+                    className="w-full h-full object-scale-down"
                   />
                 ) : (
-                  <div className="text-center p-4">
-                    <p className="text-sm text-gray-500">No image uploaded</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Recommended size: 400x400px
-                    </p>
-                  </div>
+                  <p className="text-sm text-neutral-500">No Image</p>
                 )}
               </div>
-
-              <label htmlFor="uploadCategoryImage" className="w-full lg:w-auto">
+              <label htmlFor="uploadCategoryImage">
                 <div
                   className={`
-                    ${
-                      !data.name
-                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                        : "bg-white text-primary-200 hover:bg-primary-50 cursor-pointer"
-                    }
-                    px-6 py-3 rounded-lg border-2 border-current font-medium transition-all duration-200 text-center
-                  `}
+                            ${
+                              !categoryData.name
+                                ? "bg-gray-300"
+                                : "border-primary-200 hover:bg-primary-100"
+                            }  
+                                px-4 py-2 rounded cursor-pointer border font-medium
+                            `}
                 >
-                  {data.image ? "Change Image" : "Upload Image"}
+                  Upload Image
                 </div>
 
                 <input
-                  disabled={!data.name}
+                  disabled={!categoryData.name}
+                  onChange={handleUploadCategoryImage}
                   type="file"
                   id="uploadCategoryImage"
                   className="hidden"
-                  accept="image/*"
-                  onChange={handleImageUpload}
                 />
               </label>
             </div>
           </div>
 
           <button
-            type="submit"
             className={`
-              w-full py-3 px-6 rounded-lg font-semibold text-white transition-all duration-200
-              ${
-                data.name && data.image
-                  ? "bg-primary-200 hover:bg-primary-100 transform hover:-translate-y-0.5"
-                  : "bg-gray-200 cursor-not-allowed"
-              }
-            `}
+                    ${
+                      categoryData.name && categoryData.image
+                        ? "bg-primary-200 hover:bg-primary-100"
+                        : "bg-gray-300 "
+                    }
+                    py-2    
+                    font-semibold 
+                    `}
           >
             Add Category
           </button>
@@ -129,8 +159,6 @@ export default function UploadCategoryModel({ close }) {
       </div>
     </section>
   );
-}
-
-UploadCategoryModel.propTypes = {
-  close: PropTypes.func,
 };
+
+export default UploadCategoryModel;

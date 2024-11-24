@@ -6,7 +6,7 @@ import upload from "../middleware/multer.js";
 const uploadRouter = Router();
 
 uploadRouter.post(
-  "/upload-image",
+  "/upload",
   auth,
   upload.single("image"),
   uploadImageController
