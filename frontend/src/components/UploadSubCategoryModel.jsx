@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { IoMdCloudUpload } from "react-icons/io";
 import uploadImage from "../utils/UploadImage";
 import { useSelector } from "react-redux";
 import Axios from "../utils/Axios";
@@ -68,7 +69,6 @@ export default function UploadSubCategoryModel({ close, fetchData }) {
 
       const { data: responseData } = response;
 
-      console.log("responseData", responseData);
       if (responseData.success) {
         toast.success(responseData.message);
         if (close) {
@@ -84,41 +84,53 @@ export default function UploadSubCategoryModel({ close, fetchData }) {
   };
 
   return (
-    <section className="fixed top-0 right-0 bottom-0 left-0 bg-neutral-800 bg-opacity-70 z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl bg-white p-4 rounded">
-        <div className="flex items-center justify-between gap-3">
-          <h1 className="font-semibold">Add Sub Category</h1>
-          <button onClick={close}>
-            <IoClose size={25} />
+    <section className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl bg-white rounded-xl shadow-2xl transform transition-all">
+        <div className="flex items-center justify-between p-6 border-b">
+          <h1 className="text-2xl font-bold text-gray-800">Add Sub Category</h1>
+          <button
+            onClick={close}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <IoClose size={24} className="text-gray-600" />
           </button>
         </div>
-        <form className="my-3 grid gap-3" onSubmit={handleSubmitSubCategory}>
-          <div className="grid gap-1">
-            <label htmlFor="name">Name</label>
+
+        <form className="p-6 space-y-6" onSubmit={handleSubmitSubCategory}>
+          <div className="space-y-2">
+            <label htmlFor="name" className="text-sm font-medium text-gray-700">
+              Name
+            </label>
             <input
               id="name"
               name="name"
               value={subCategoryData.name}
               onChange={handleChange}
-              className="p-3 bg-blue-50 border outline-none focus-within:border-primary-200 rounded "
+              className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-transparent transition-all"
+              placeholder="Enter sub category name"
             />
           </div>
-          <div className="grid gap-1">
-            <p>Image</p>
-            <div className="flex flex-col lg:flex-row items-center gap-3">
-              <div className="border h-36 w-full lg:w-36 bg-blue-50 flex items-center justify-center">
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-gray-700">Image</p>
+            <div className="flex flex-col lg:flex-row items-center gap-4">
+              <div className="border-2 border-dashed border-gray-300 h-48 w-full lg:w-48 rounded-lg bg-gray-50 flex items-center justify-center overflow-hidden">
                 {!subCategoryData.image ? (
-                  <p className="text-sm text-neutral-400">No Image</p>
+                  <div className="text-center text-gray-400">
+                    <IoMdCloudUpload size={40} className="mx-auto mb-2" />
+                    <p className="text-sm">No Image Selected</p>
+                  </div>
                 ) : (
                   <img
                     alt="subCategory"
                     src={subCategoryData.image}
-                    className="w-full h-full object-scale-down"
+                    className="w-full h-full object-contain"
                   />
                 )}
               </div>
-              <label htmlFor="uploadSubCategoryImage">
-                <div className="px-4 py-1 border border-primary-100 text-primary-200 rounded hover:bg-primary-200 hover:text-neutral-900 cursor-pointer  ">
+              <label htmlFor="uploadSubCategoryImage" className="flex-shrink-0">
+                <div className="px-6 py-3 bg-primary-200 text-white rounded-lg hover:bg-primary-300 transition-colors cursor-pointer flex items-center gap-2">
+                  <IoMdCloudUpload size={20} />
                   Upload Image
                 </div>
                 <input
@@ -126,36 +138,37 @@ export default function UploadSubCategoryModel({ close, fetchData }) {
                   id="uploadSubCategoryImage"
                   className="hidden"
                   onChange={handleUploadSubCategoryImage}
+                  accept="image/*"
                 />
               </label>
             </div>
           </div>
-          <div className="grid gap-1">
-            <label>Select Category</label>
-            <div className="border focus-within:border-primary-200 rounded">
-              {/*display value**/}
-              <div className="flex flex-wrap gap-2">
-                {subCategoryData.category.map((cat, index) => {
-                  return (
-                    <p
-                      key={cat._id + "selectedValue"}
-                      className="bg-white shadow-md px-1 m-1 flex items-center gap-2"
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700">
+              Select Category
+            </label>
+            <div className="border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary-200">
+              <div className="p-2 flex flex-wrap gap-2 min-h-[50px]">
+                {subCategoryData.category.map((cat) => (
+                  <span
+                    key={cat._id + "selectedValue"}
+                    className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary-100 text-primary-800"
+                  >
+                    {cat.name}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveCategorySelected(cat._id)}
+                      className="ml-2 hover:text-red-600"
                     >
-                      {cat.name}
-                      <div
-                        className="cursor-pointer hover:text-red-600"
-                        onClick={() => handleRemoveCategorySelected(cat._id)}
-                      >
-                        <IoClose size={20} />
-                      </div>
-                    </p>
-                  );
-                })}
+                      <IoClose size={18} />
+                    </button>
+                  </span>
+                ))}
               </div>
 
-              {/*select category**/}
               <select
-                className="w-full p-2 bg-transparent outline-none border"
+                className="w-full p-3 bg-transparent outline-none border-t border-gray-300"
                 onChange={(e) => {
                   const value = e.target.value;
                   const categoryDetails = allCategory.find(
@@ -170,34 +183,37 @@ export default function UploadSubCategoryModel({ close, fetchData }) {
                   });
                 }}
               >
-                <option value={""}>Select Category</option>
-                {allCategory.map((category, index) => {
-                  return (
-                    <option
-                      value={category?._id}
-                      key={category._id + "subcategory"}
-                    >
-                      {category?.name}
-                    </option>
-                  );
-                })}
+                <option value="">Select Category</option>
+                {allCategory.map((category) => (
+                  <option
+                    value={category?._id}
+                    key={category._id + "subcategory"}
+                  >
+                    {category?.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           <button
-            className={`px-4 py-2 border
-                            ${
-                              subCategoryData?.name &&
-                              subCategoryData?.image &&
-                              subCategoryData?.category[0]
-                                ? "bg-primary-200 hover:bg-primary-100"
-                                : "bg-gray-200"
-                            }    
-                            font-semibold
-                        `}
+            type="submit"
+            disabled={
+              !subCategoryData?.name ||
+              !subCategoryData?.image ||
+              !subCategoryData?.category[0]
+            }
+            className={`w-full py-3 rounded-lg font-semibold transition-all
+              ${
+                subCategoryData?.name &&
+                subCategoryData?.image &&
+                subCategoryData?.category[0]
+                  ? "bg-primary-200 text-white hover:bg-primary-300"
+                  : "bg-gray-100 text-gray-400 cursor-not-allowed"
+              }    
+            `}
           >
-            Submit
+            Create Sub Category
           </button>
         </form>
       </div>
