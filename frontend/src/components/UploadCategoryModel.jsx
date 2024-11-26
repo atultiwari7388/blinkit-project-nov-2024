@@ -5,8 +5,10 @@ import Axios from "../utils/Axios";
 import SummaryApi from "../common/Api";
 import toast from "react-hot-toast";
 import AxiosToastError from "../utils/AxiosToastError";
+import PropTypes from "prop-types";
+import { LoadingIndicator } from "../utils/LoadinIndicator";
 
-const UploadCategoryModel = ({ close }) => {
+const UploadCategoryModel = ({ close, refetch }) => {
   const [categoryData, setCategoryData] = useState({
     name: "",
     image: "",
@@ -39,6 +41,7 @@ const UploadCategoryModel = ({ close }) => {
       if (responseData.success) {
         toast.success(responseData.message);
         close();
+        refetch();
       }
     } catch (error) {
       AxiosToastError(error);
@@ -74,6 +77,10 @@ const UploadCategoryModel = ({ close }) => {
       toast.error("Failed to upload image. Please try again.");
     }
   };
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <section className="fixed top-0 bottom-0 left-0 right-0 p-4 bg-neutral-800 bg-opacity-60 flex items-center justify-center">
@@ -162,3 +169,8 @@ const UploadCategoryModel = ({ close }) => {
 };
 
 export default UploadCategoryModel;
+
+UploadCategoryModel.propTypes = {
+  close: PropTypes.func.isRequired,
+  refetch: PropTypes.func.isRequired,
+};

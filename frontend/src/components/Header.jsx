@@ -41,7 +41,7 @@ export default function Header() {
   };
 
   return (
-    <header className="h-24 lg:h-20 shadow-md sticky top-0 flex flex-col justify-center gap-1 bg-gradient-to-r from-primary-500 to-primary-200">
+    <header className="h-24 lg:h-20 shadow-md w-full top-0 z-40 flex flex-col justify-center gap-1 bg-gradient-to-r from-primary-500 to-primary-200">
       {!(isSearchPage && isMobile) && (
         <div className="container mx-auto flex items-center px-4 justify-between">
           {/** Logo Section */}
