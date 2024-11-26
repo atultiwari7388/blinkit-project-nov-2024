@@ -16,6 +16,7 @@ import Category from "../pages/category/Category";
 import SubCategory from "../pages/subCategory/SubCategory";
 import UploadProduct from "../pages/uploadProduct/UploadProduct";
 import AdminProduct from "../pages/adminProduct/AdminProduct";
+import AdminPermission from "../layout/AdminPermission";
 
 const router = createBrowserRouter([
   {
@@ -72,19 +73,35 @@ const router = createBrowserRouter([
           },
           {
             path: "category",
-            element: <Category />,
+            element: (
+              <AdminPermission>
+                <Category />
+              </AdminPermission>
+            ),
           },
           {
             path: "subcategory",
-            element: <SubCategory />,
+            element: (
+              <AdminPermission>
+                <SubCategory />
+              </AdminPermission>
+            ),
           },
           {
             path: "upload-product",
-            element: <UploadProduct />,
+            element: (
+              <AdminPermission>
+                <UploadProduct />
+              </AdminPermission>
+            ),
           },
           {
             path: "product",
-            element: <AdminProduct />,
+            element: (
+              <AdminPermission>
+                <AdminProduct />
+              </AdminPermission>
+            ),
           },
         ],
       },
