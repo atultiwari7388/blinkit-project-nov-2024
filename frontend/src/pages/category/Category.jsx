@@ -6,6 +6,7 @@ import Axios from "../../utils/Axios";
 import SummaryApi from "../../common/Api";
 import { LoadingIndicator } from "../../utils/LoadinIndicator";
 import toast from "react-hot-toast";
+import EditCategory from "../../components/EditCategory";
 
 export default function Category() {
   const [openUploadCategory, setOpenUploadCategory] = useState(false);
