@@ -8,6 +8,7 @@ import { LoadingIndicator } from "../../utils/LoadinIndicator";
 import toast from "react-hot-toast";
 import EditCategory from "../../components/EditCategory";
 import CofirmBox from "../../components/ConfirmBox";
+import { useSelector } from "react-redux";
 
 export default function Category() {
   const [openUploadCategory, setOpenUploadCategory] = useState(false);
@@ -22,6 +23,8 @@ export default function Category() {
   const [deleteCategory, setDeleteCategory] = useState({
     _id: "",
   });
+
+  const allCategory = useSelector((state) => state.product.allCategory);
 
   const fetchCategory = async () => {
     try {
@@ -42,8 +45,8 @@ export default function Category() {
   };
 
   useEffect(() => {
-    fetchCategory();
-  }, []);
+    setCategoryData(allCategory);
+  }, [allCategory]);
 
   const handleDeleteCategory = async () => {
     try {
@@ -56,7 +59,8 @@ export default function Category() {
 
       if (responseData.success) {
         toast.success(responseData.message);
-        fetchCategory();
+        // fetchCategory();
+        setCategoryData(allCategory);
         setOpenConfirmBoxDelete(false);
       }
     } catch (error) {
@@ -79,9 +83,8 @@ export default function Category() {
         </button>
       </div>
       {!categoryData[0] && !loading && <NoDataFound />}
-
-      <div className="p-4 grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-        {categoryData.map((category, index) => {
+      <div className="p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+        {categoryData.map((category) => {
           return (
             <div className="w-32 h-56 rounded shadow-md" key={category._id}>
               <img
