@@ -11,6 +11,8 @@ import { FaPlus } from "react-icons/fa";
 import ViewImage from "../../components/ViewImage";
 import EditSubCategory from "../../components/EditSubCategory";
 import { LoadingIndicator } from "../../utils/LoadinIndicator";
+import toast from "react-hot-toast";
+import CofirmBox from "../../components/ConfirmBox";
 
 export default function SubCategory() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +23,12 @@ export default function SubCategory() {
   const [editData, setEditData] = useState({
     _id: "",
   });
+
+  const [deleteSubCategory, setDeleteSubCategory] = useState({
+    _id: "",
+  });
+  const [openDeleteConfirmBox, setOpenDeleteConfirmBox] = useState(false);
+
   const columnHelper = createColumnHelper();
 
   const fetchSubCategory = async () => {
@@ -41,6 +49,27 @@ export default function SubCategory() {
       setIsLoading(false);
     }
   };
+
+  const handleDeleteSubCategory = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.deleteSubCategory,
+        data: deleteSubCategory,
+      });
+
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        toast.success(responseData.message);
+        fetchSubCategory();
+        setOpenDeleteConfirmBox(false);
+        setDeleteSubCategory({ _id: "" });
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    }
+  };
+
   useEffect(() => {
     fetchSubCategory();
   }, []);
@@ -105,8 +134,8 @@ export default function SubCategory() {
             </button>
             <button
               onClick={() => {
-                // setOpenDeleteConfirmBox(true);
-                // setDeleteSubCategory(row.original);
+                setOpenDeleteConfirmBox(true);
+                setDeleteSubCategory(row.original);
               }}
               className="p-2.5 bg-red-50 rounded-full hover:bg-red-100 text-red-500 hover:text-red-600 transition-colors duration-200"
               title="Delete"
@@ -157,6 +186,14 @@ export default function SubCategory() {
           data={editData}
           close={() => setOpenEdit(false)}
           fetchData={fetchSubCategory}
+        />
+      )}
+
+      {openDeleteConfirmBox && (
+        <CofirmBox
+          cancel={() => setOpenDeleteConfirmBox(false)}
+          close={() => setOpenDeleteConfirmBox(false)}
+          confirm={handleDeleteSubCategory}
         />
       )}
     </section>

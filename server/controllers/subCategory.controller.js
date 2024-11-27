@@ -90,3 +90,24 @@ export const updateSubCategoryController = async (request, response) => {
     });
   }
 };
+
+export const deleteSubCategoryController = async (request, response) => {
+  try {
+    const { _id } = request.body;
+    console.log("Id", _id);
+    const deleteSub = await SubCategoryModel.findByIdAndDelete(_id);
+
+    return response.json({
+      message: "Delete successfully",
+      data: deleteSub,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
