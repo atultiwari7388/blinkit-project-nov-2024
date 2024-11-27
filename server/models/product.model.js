@@ -4,42 +4,53 @@ const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      required: true,
+      trim: true,
     },
     image: {
       type: Array,
       default: [],
+      required: true,
     },
     category: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "category",
+        required: true,
       },
     ],
     subCategory: [
       {
         type: mongoose.Schema.ObjectId,
         ref: "subCategory",
+        required: true,
       },
     ],
     unit: {
       type: String,
-      default: "",
+      required: true,
+      trim: true,
     },
     stock: {
       type: Number,
-      default: null,
+      required: true,
+      min: 0,
     },
     price: {
       type: Number,
-      defualt: null,
+      required: true,
+      min: 0,
     },
     discount: {
       type: Number,
-      default: null,
+      default: 0,
+      min: 0,
+      max: 100,
     },
     description: {
       type: String,
-      default: "",
+      required: true,
+      trim: true,
     },
     more_details: {
       type: Object,
