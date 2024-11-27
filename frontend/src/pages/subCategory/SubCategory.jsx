@@ -8,11 +8,19 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { MdDelete } from "react-icons/md";
 import { HiPencil } from "react-icons/hi";
 import { FaPlus } from "react-icons/fa";
+import ViewImage from "../../components/ViewImage";
+import EditSubCategory from "../../components/EditSubCategory";
+import { LoadingIndicator } from "../../utils/LoadinIndicator";
 
 export default function SubCategory() {
   const [isLoading, setIsLoading] = useState(false);
   const [openUploadSubCategory, setOpenUploadSubCategory] = useState(false);
   const [subCategoryData, setSubCategoryData] = useState([]);
+  const [ImageURL, setImageURL] = useState("");
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState({
+    _id: "",
+  });
   const columnHelper = createColumnHelper();
 
   const fetchSubCategory = async () => {
@@ -54,7 +62,7 @@ export default function SubCategory() {
               alt={row.original.name}
               className="w-12 h-12 rounded-lg object-cover shadow-sm hover:scale-150 transition-transform duration-300 cursor-pointer"
               onClick={() => {
-                // setImageURL(row.original.image);
+                setImageURL(row.original.image);
               }}
             />
           </div>
@@ -87,8 +95,8 @@ export default function SubCategory() {
           <div className="flex items-center justify-center gap-3">
             <button
               onClick={() => {
-                // setOpenEdit(true);
-                // setEditData(row.original);
+                setOpenEdit(true);
+                setEditData(row.original);
               }}
               className="p-2.5 bg-green-50 rounded-full hover:bg-green-100 text-green-600 hover:text-green-700 transition-colors duration-200"
               title="Edit"
@@ -110,6 +118,10 @@ export default function SubCategory() {
       },
     }),
   ];
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <section className="">
@@ -134,6 +146,16 @@ export default function SubCategory() {
       {openUploadSubCategory && (
         <UploadSubCategoryModel
           close={() => setOpenUploadSubCategory(false)}
+          fetchData={fetchSubCategory}
+        />
+      )}
+
+      {ImageURL && <ViewImage url={ImageURL} close={() => setImageURL("")} />}
+
+      {openEdit && (
+        <EditSubCategory
+          data={editData}
+          close={() => setOpenEdit(false)}
           fetchData={fetchSubCategory}
         />
       )}
