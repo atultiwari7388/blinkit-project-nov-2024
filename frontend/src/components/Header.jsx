@@ -43,7 +43,7 @@ export default function Header() {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-0 right-0 z-50 mx-2 mt-2 rounded-xl border border-base-300 bg-primary-200 backdrop-blur-sm shadow-lg"
+      className="fixed top-0 left-0 right-0 z-50 mx-2 mt-2 rounded-xl border border-base-300 bg-bg-dark backdrop-blur-sm shadow-lg"
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">

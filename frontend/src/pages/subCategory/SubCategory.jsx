@@ -13,6 +13,7 @@ import EditSubCategory from "../../components/EditSubCategory";
 import { LoadingIndicator } from "../../utils/LoadinIndicator";
 import toast from "react-hot-toast";
 import CofirmBox from "../../components/ConfirmBox";
+import { useSelector } from "react-redux";
 
 export default function SubCategory() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +31,8 @@ export default function SubCategory() {
   const [openDeleteConfirmBox, setOpenDeleteConfirmBox] = useState(false);
 
   const columnHelper = createColumnHelper();
+
+  const allSubCategory = useSelector((state) => state?.product?.allSubCategory);
 
   const fetchSubCategory = async () => {
     try {
@@ -71,8 +74,8 @@ export default function SubCategory() {
   };
 
   useEffect(() => {
-    fetchSubCategory();
-  }, []);
+    setSubCategoryData(allSubCategory);
+  }, [allSubCategory]);
 
   const column = [
     columnHelper.accessor("name", {

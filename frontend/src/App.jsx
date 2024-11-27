@@ -7,7 +7,11 @@ import fetchUserDetails from "./utils/fetchUserDetails";
 import { setUserDetails } from "./reduxStores/userSlice";
 import { useDispatch } from "react-redux";
 import AxiosToastError from "./utils/AxiosToastError";
-import { setAllCategory, setLoadingCategory } from "./reduxStores/productSlice";
+import {
+  setAllCategory,
+  setAllSubCategory,
+  setLoadingCategory,
+} from "./reduxStores/productSlice";
 import Axios from "./utils/Axios";
 import SummaryApi from "./common/Api";
 
@@ -48,9 +52,29 @@ export default function App() {
     }
   };
 
+  const fetchSubCategory = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getSubCategory,
+      });
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        dispatch(
+          setAllSubCategory(
+            responseData.data.sort((a, b) => a.name.localeCompare(b.name))
+          )
+        );
+      }
+    } catch (error) {
+      return AxiosToastError(error);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
     fetchCategory();
+    fetchSubCategory();
   }, []);
 
   return (

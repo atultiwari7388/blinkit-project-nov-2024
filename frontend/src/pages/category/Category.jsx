@@ -74,11 +74,11 @@ export default function Category() {
       <div className="mb-8 p-6 bg-white shadow-md rounded-xl flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-12 w-1 bg-primary-200 rounded-full"></div>
-          <h2 className="text-2xl font-bold text-gray-800">Categories</h2>
+          <h2 className="text-2xl font-bold text-text-dark">Categories</h2>
         </div>
         <button
           onClick={() => setOpenUploadCategory(true)}
-          className="px-5 py-2.5 bg-primary-200 hover:bg-primary-200 text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2 hover:shadow-lg"
+          className="px-5 py-2.5 bg-primary-200 hover:bg-primary-100 text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2 hover:shadow-lg"
         >
           <FaPlus size={16} />
           Add Category
