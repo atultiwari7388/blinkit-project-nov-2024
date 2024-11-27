@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import EditCategory from "../../components/EditCategory";
 import CofirmBox from "../../components/ConfirmBox";
 import { useSelector } from "react-redux";
+import { FaPlus } from "react-icons/fa";
 
 export default function Category() {
   const [openUploadCategory, setOpenUploadCategory] = useState(false);
@@ -70,15 +71,16 @@ export default function Category() {
 
   return (
     <section className="">
-      <div className="p-4 bg-white shadow-lg rounded-lg flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-gray-800">Categories</h2>
+      <div className="mb-8 p-6 bg-white shadow-md rounded-xl flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="h-12 w-1 bg-primary-200 rounded-full"></div>
+          <h2 className="text-2xl font-bold text-gray-800">Categories</h2>
         </div>
         <button
           onClick={() => setOpenUploadCategory(true)}
-          className="px-4 py-2 bg-primary-200 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors duration-200 flex items-center gap-2"
+          className="px-5 py-2.5 bg-primary-200 hover:bg-primary-200 text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2 hover:shadow-lg"
         >
-          <span className="text-lg">+</span>
+          <FaPlus size={16} />
           Add Category
         </button>
       </div>
