@@ -7,6 +7,10 @@ import { useSelector } from "react-redux";
 import { IoClose } from "react-icons/io5";
 import ViewImage from "../../components/ViewImage";
 import AddFieldComponent from "../../components/AddFieldComponent";
+import Axios from "../../utils/Axios";
+import SummaryApi from "../../common/Api";
+import AxiosToastError from "../../utils/AxiosToastError";
+import successToast from "../../utils/SuccessToast";
 
 export default function UploadProduct() {
   const [data, setData] = useState({
@@ -101,8 +105,35 @@ export default function UploadProduct() {
     setOpenAddField(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("data", data);
+
+    try {
+      const response = await Axios({
+        ...SummaryApi.createProduct,
+        data: data,
+      });
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        successToast(responseData.message);
+        setData({
+          name: "",
+          image: [],
+          category: [],
+          subCategory: [],
+          unit: "",
+          stock: "",
+          price: "",
+          discount: "",
+          description: "",
+          more_details: {},
+        });
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    }
   };
 
   return (
@@ -181,7 +212,7 @@ export default function UploadProduct() {
                         Click to Upload Images
                       </p>
                       <p className="mt-1 text-sm text-gray-500">
-                        PNG, JPG up to 10MB
+                        PNG, JPG up to 2MB
                       </p>
                     </>
                   )}
