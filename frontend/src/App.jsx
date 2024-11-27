@@ -54,13 +54,15 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <main className="min-h-[78vh]">
-        <Outlet />
+      <main className="flex-grow pt-28 pb-8 px-4">
+        <div className="container mx-auto">
+          <Outlet />
+        </div>
       </main>
       <Footer />
       <Toaster />
-    </>
+    </div>
   );
 }
