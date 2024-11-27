@@ -87,6 +87,24 @@ export default function UploadProduct() {
     });
   };
 
+  const handleAddField = () => {
+    setData((preve) => {
+      return {
+        ...preve,
+        more_details: {
+          ...preve.more_details,
+          [fieldName]: "",
+        },
+      };
+    });
+    setFieldName("");
+    setOpenAddField(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <section className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -100,7 +118,10 @@ export default function UploadProduct() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg">
-          <form className="p-8 space-y-8 max-w-4xl mx-auto">
+          <form
+            className="p-8 space-y-8 max-w-4xl mx-auto"
+            onSubmit={handleSubmit}
+          >
             {/* Product Name */}
             <div className="space-y-2">
               <label
@@ -433,7 +454,7 @@ export default function UploadProduct() {
           <AddFieldComponent
             value={fieldName}
             onChange={(e) => setFieldName(e.target.value)}
-            // submit={handleAddField}
+            submit={handleAddField}
             close={() => setOpenAddField(false)}
           />
         )}
