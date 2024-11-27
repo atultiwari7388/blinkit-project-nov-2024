@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { LoadingIndicator } from "../../utils/LoadinIndicator";
 import uploadImage from "../../utils/UploadImage";
 import { useSelector } from "react-redux";
 import { IoClose } from "react-icons/io5";
@@ -11,6 +10,7 @@ import Axios from "../../utils/Axios";
 import SummaryApi from "../../common/Api";
 import AxiosToastError from "../../utils/AxiosToastError";
 import successToast from "../../utils/SuccessToast";
+import { HashLoader } from "react-spinners";
 
 export default function UploadProduct() {
   const [data, setData] = useState({
@@ -204,7 +204,9 @@ export default function UploadProduct() {
               >
                 <div className="text-center">
                   {imageLoading ? (
-                    <LoadingIndicator />
+                    <div className="flex items-center justify-center">
+                      <HashLoader className="text-primary-200" />
+                    </div>
                   ) : (
                     <>
                       <FaCloudUploadAlt className="mx-auto h-12 w-12 text-primary-200 group-hover:scale-110 transition duration-200" />
