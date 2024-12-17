@@ -2,6 +2,8 @@ import Proptypes from "prop-types";
 import { Link } from "react-router-dom";
 import { valideURLConvert } from "../utils/validUrlConverter";
 import { useState } from "react";
+import { DisplayPriceInRupees } from "../utils/DisplayPriceIn";
+import { pricewithDiscount } from "../utils/PriceWithDiscount";
 
 export default function CardProduct({ data }) {
   const url = `/product/${valideURLConvert(data.name)}-${data._id}`;
