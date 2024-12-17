@@ -70,16 +70,24 @@ export default function CategoryWiseProductDisplay({ id, name }) {
   const redirectURL = handleRedirectProductListpage();
 
   return (
-    <div>
-      <div className="container mx-auto p-4 flex items-center justify-between gap-4">
-        <h3 className="font-semibold text-lg md:text-xl">{name}</h3>
-        <Link to={redirectURL} className="text-green-600 hover:text-green-400">
-          See All
+    <div className="bg-gradient-to-br from-white to-green-50 py-6 rounded-xl shadow-sm">
+      <div className="container mx-auto px-6 flex items-center justify-between gap-4 mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-1 h-8 bg-primary-200 rounded-full"></div>
+          <h3 className="font-bold text-xl md:text-2xl bg-gradient-to-r from-primary-200 to-primary-100 bg-clip-text text-transparent">
+            {name}
+          </h3>
+        </div>
+        <Link
+          to={redirectURL}
+          className="px-4 py-2 rounded-full bg-primary-200 text-white font-medium hover:bg-primary-100 transition-all duration-300 hover:shadow-lg hover:scale-105"
+        >
+          View All Products →
         </Link>
       </div>
-      <div className="relative flex items-center ">
+      <div className="relative flex items-center">
         <div
-          className=" flex gap-4 md:gap-6 lg:gap-8 container mx-auto px-4 overflow-x-scroll scrollbar-none scroll-smooth"
+          className="flex gap-4 md:gap-6 lg:gap-8 container mx-auto px-6 overflow-x-scroll scrollbar-none scroll-smooth"
           ref={containerRef}
         >
           {loading &&
@@ -98,18 +106,18 @@ export default function CategoryWiseProductDisplay({ id, name }) {
             );
           })}
         </div>
-        <div className="w-full left-0 right-0 container mx-auto  px-2  absolute hidden lg:flex justify-between">
+        <div className="w-full left-0 right-0 container mx-auto px-4 absolute hidden lg:flex justify-between">
           <button
             onClick={handleScrollLeft}
-            className="z-10 relative bg-white hover:bg-gray-100 shadow-lg text-lg p-2 rounded-full"
+            className="z-10 relative bg-primary-200 hover:bg-secondary-100 hover:text-white shadow-lg text-xl p-3 rounded-full transition-all duration-300 transform hover:scale-110"
           >
-            <FaAngleLeft />
+            <FaAngleLeft className="text-white" />
           </button>
           <button
             onClick={handleScrollRight}
-            className="z-10 relative  bg-white hover:bg-gray-100 shadow-lg p-2 text-lg rounded-full"
+            className="z-10 relative bg-primary-200 hover:bg-secondary-100 hover:text-white shadow-lg text-xl p-3 rounded-full transition-all duration-300 transform hover:scale-110"
           >
-            <FaAngleRight />
+            <FaAngleRight className="text-white" />
           </button>
         </div>
       </div>
