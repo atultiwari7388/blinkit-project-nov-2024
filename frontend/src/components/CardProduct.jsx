@@ -4,6 +4,7 @@ import { valideURLConvert } from "../utils/validUrlConverter";
 import { useState } from "react";
 import { DisplayPriceInRupees } from "../utils/DisplayPriceIn";
 import { pricewithDiscount } from "../utils/PriceWithDiscount";
+import AddToCartBtn from "./AddToCartBtn";
 
 export default function CardProduct({ data }) {
   const url = `/product/${valideURLConvert(data.name)}-${data._id}`;
@@ -48,7 +49,7 @@ export default function CardProduct({ data }) {
           {data.stock == 0 ? (
             <p className="text-red-500 text-sm text-center">Out of stock</p>
           ) : (
-            <AddToCartButton data={data} />
+            <AddToCartBtn data={data} />
           )}
         </div>
       </div>
