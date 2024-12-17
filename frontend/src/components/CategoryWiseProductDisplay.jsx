@@ -8,6 +8,7 @@ import CardLoading from "./CardLoading";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { valideURLConvert } from "../utils/validUrlConverter";
 import { useSelector } from "react-redux";
+import CardProduct from "./CardProduct";
 
 export default function CategoryWiseProductDisplay({ id, name }) {
   const [data, setData] = useState([]);
@@ -88,14 +89,14 @@ export default function CategoryWiseProductDisplay({ id, name }) {
               );
             })}
 
-          {/* {data.map((p, index) => {
+          {data.map((p, index) => {
             return (
               <CardProduct
                 data={p}
                 key={p._id + "CategorywiseProductDisplay" + index}
               />
             );
-          })} */}
+          })}
         </div>
         <div className="w-full left-0 right-0 container mx-auto  px-2  absolute hidden lg:flex justify-between">
           <button
