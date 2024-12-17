@@ -1,10 +1,29 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { valideURLConvert } from "../../utils/validUrlConverter";
 
 export default function Home() {
   const loadingCategory = useSelector((state) => state.product.loadingCategory);
   const categoryData = useSelector((state) => state.product.allCategory);
+  const subCategoryData = useSelector((state) => state.product.allSubCategory);
+  const navigate = useNavigate();
 
-  const handleRedirectProductListpage = async () => {};
+  const handleRedirectProductListpage = (id, cat) => {
+    // console.log(id, cat);
+    const subcategory = subCategoryData.find((sub) => {
+      const filterData = sub.category.some((c) => {
+        return c._id == id;
+      });
+
+      return filterData ? true : null;
+    });
+    const url = `/${valideURLConvert(cat)}-${id}/${valideURLConvert(
+      subcategory.name
+    )}-${subcategory._id}`;
+
+    navigate(url);
+    // console.log(url);
+  };
 
   return (
     <section className="bg-white">

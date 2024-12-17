@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Home from "../pages/home/home";
 import SearchPage from "../pages/search/Search";
 import LoginPage from "../pages/login/LoginPage";
 import RegisterPage from "../pages/register/RegisterPage";
@@ -17,6 +16,8 @@ import SubCategory from "../pages/subCategory/SubCategory";
 import UploadProduct from "../pages/uploadProduct/UploadProduct";
 import AdminProduct from "../pages/adminProduct/AdminProduct";
 import AdminPermission from "../layout/AdminPermission";
+import ProductListPage from "../pages/productListPage/ProductListPage";
+import Home from "../pages/home/Home";
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,16 @@ const router = createBrowserRouter([
                 <AdminProduct />
               </AdminPermission>
             ),
+          },
+        ],
+      },
+
+      {
+        path: ":category",
+        children: [
+          {
+            path: ":subCategory",
+            element: <ProductListPage />,
           },
         ],
       },
