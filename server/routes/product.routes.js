@@ -1,6 +1,7 @@
 import Router from "express";
 import {
   createProductController,
+  getProductByCategory,
   getProductController,
 } from "../controllers/product.controller.js";
 import auth from "../middleware/auth.js";
