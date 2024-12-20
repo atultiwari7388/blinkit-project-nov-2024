@@ -212,3 +212,37 @@ export const getProductDetails = async (request, response) => {
     });
   }
 };
+
+export const updateProductDetails = async (request, response) => {
+  try {
+    const { _id } = request.body;
+
+    if (!_id) {
+      return response.status(400).json({
+        message: "provide product _id",
+        error: true,
+        success: false,
+      });
+    }
+
+    const updateProduct = await ProductModel.updateOne(
+      { _id: _id },
+      {
+        ...request.body,
+      }
+    );
+
+    return response.json({
+      message: "updated successfully",
+      data: updateProduct,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};

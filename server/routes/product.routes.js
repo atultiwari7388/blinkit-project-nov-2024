@@ -5,6 +5,7 @@ import {
   getProductByCategoryAndSubCategory,
   getProductController,
   getProductDetails,
+  updateProductDetails,
 } from "../controllers/product.controller.js";
 import auth from "../middleware/auth.js";
 
