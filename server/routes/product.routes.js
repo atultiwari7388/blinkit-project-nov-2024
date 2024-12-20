@@ -8,6 +8,7 @@ import {
   updateProductDetails,
 } from "../controllers/product.controller.js";
 import auth from "../middleware/auth.js";
+import { admin } from "../middleware/admin.js";
 
 const productRouter = Router();
 
@@ -19,5 +20,7 @@ productRouter.post(
   getProductByCategoryAndSubCategory
 );
 productRouter.post("/get-product-details", getProductDetails);
+
+productRouter.put("/update-product-details", auth, admin, updateProductDetails);
 
 export default productRouter;
