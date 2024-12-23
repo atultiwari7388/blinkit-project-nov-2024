@@ -10,15 +10,23 @@ const Search = () => {
   const location = useLocation();
   const [isSearchPage, setIsSearchPage] = useState(false);
   const [isMobile] = useMobile();
-  const params = new URLSearchParams(location.search);
-  const [searchText, setSearchText] = useState(params.get("q") || "");
+  const params = useLocation();
+  // const [searchText, setSearchText] = useState(params.get("q") || "");
+  const searchText = params.search.slice(3);
 
   useEffect(() => {
-    setIsSearchPage(location.pathname === "/search");
+    const isSearch = location.pathname === "/search";
+    setIsSearchPage(isSearch);
   }, [location]);
 
   const redirectToSearchPage = () => {
     navigate("/search");
+  };
+
+  const handleOnChange = (e) => {
+    const value = e.target.value;
+    const url = `/search?q=${value}`;
+    navigate(url);
   };
 
   return (
@@ -79,21 +87,12 @@ const Search = () => {
             <div className="w-full h-full flex items-center">
               <input
                 type="text"
-                placeholder="Search for atta, dal and more..."
+                placeholder="Search for atta dal and more."
                 autoFocus
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                defaultValue={searchText}
+                onChange={handleOnChange}
                 className="bg-transparent w-full h-full outline-none px-2 placeholder:text-gray-400"
               />
-              {searchText && (
-                <button
-                  onClick={() => setSearchText("")}
-                  className="p-2 hover:text-red-500 transition-colors duration-200"
-                  aria-label="Clear search"
-                >
-                  <span className="text-lg">×</span>
-                </button>
-              )}
             </div>
           )}
         </div>
