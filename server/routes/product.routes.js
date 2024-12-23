@@ -1,6 +1,7 @@
 import Router from "express";
 import {
   createProductController,
+  deleteProductDetails,
   getProductByCategory,
   getProductByCategoryAndSubCategory,
   getProductController,
@@ -19,8 +20,14 @@ productRouter.post(
   "/get-pruduct-by-category-and-subcategory",
   getProductByCategoryAndSubCategory
 );
+
+//get product details
 productRouter.post("/get-product-details", getProductDetails);
 
+//update product
 productRouter.put("/update-product-details", auth, admin, updateProductDetails);
+
+//delete product
+productRouter.delete("/delete-product", auth, admin, deleteProductDetails);
 
 export default productRouter;
