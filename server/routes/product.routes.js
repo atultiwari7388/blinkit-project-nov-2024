@@ -6,6 +6,7 @@ import {
   getProductByCategoryAndSubCategory,
   getProductController,
   getProductDetails,
+  searchProduct,
   updateProductDetails,
 } from "../controllers/product.controller.js";
 import auth from "../middleware/auth.js";
@@ -29,5 +30,8 @@ productRouter.put("/update-product-details", auth, admin, updateProductDetails);
 
 //delete product
 productRouter.delete("/delete-product", auth, admin, deleteProductDetails);
+
+//search product
+productRouter.post("/search-product", searchProduct);
 
 export default productRouter;
