@@ -14,6 +14,7 @@ import {
 } from "./reduxStores/productSlice";
 import Axios from "./utils/Axios";
 import SummaryApi from "./common/Api";
+import GlobalProvider from "./provider/GlobalProvider";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -78,15 +79,17 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-grow pt-28 pb-8 px-4">
-        <div className="container mx-auto">
-          <Outlet />
-        </div>
-      </main>
-      <Footer />
-      <Toaster />
-    </div>
+    <GlobalProvider>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow pt-28 pb-8 px-4">
+          <div className="container mx-auto">
+            <Outlet />
+          </div>
+        </main>
+        <Footer />
+        <Toaster />
+      </div>
+    </GlobalProvider>
   );
 }

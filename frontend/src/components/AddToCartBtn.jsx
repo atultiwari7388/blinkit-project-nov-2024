@@ -11,7 +11,7 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 export default function AddToCartButton({ data }) {
   const { fetchCartItem, updateCartItem, deleteCartItem } = useGlobalContext();
   const [loading, setLoading] = useState(false);
-  const cartItem = useSelector((state) => state.cartItem.cart);
+  const cartItem = useSelector((state) => state.cartItem?.cart);
   const [isAvailableCart, setIsAvailableCart] = useState(false);
   const [qty, setQty] = useState(0);
   const [cartItemDetails, setCartItemsDetails] = useState();
